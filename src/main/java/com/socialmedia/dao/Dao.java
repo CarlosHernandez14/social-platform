@@ -25,9 +25,12 @@ public class Dao {
         
         // Load the users from the file
         List<User> users = getAllUsers();
+        
+        String hashPass = PasswordUtils.hashPassword(password);
+        
         // Check if the user exists
         for (User u : users) {
-            if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(hashPass)) {
                 return u;
             }
         }
@@ -36,7 +39,7 @@ public class Dao {
         return null;
     }
 
-    public static void register (String username, String password) {
+    public static boolean register (String username, String password) {
         
         // Load the users from the file
         List<User> users = getAllUsers();
@@ -44,7 +47,7 @@ public class Dao {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 System.out.println("El usuario ya existe");
-                return;
+                return false;
             }
         }
         // Add the user to the list
@@ -52,8 +55,10 @@ public class Dao {
         // Save the users to the file
         if (saveUsers(users)) {
             System.out.println("Usuario registrado correctamente");
+            return true;
         } else {
             System.out.println("Error al registrar el usuario");
+            return false;
         }
     }
 

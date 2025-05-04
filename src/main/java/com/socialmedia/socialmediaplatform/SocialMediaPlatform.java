@@ -6,6 +6,7 @@ package com.socialmedia.socialmediaplatform;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.socialmedia.dao.Dao;
+import com.socialmedia.views.LoginWindow;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -28,6 +29,9 @@ public class SocialMediaPlatform {
         } catch (UnsupportedLookAndFeelException ex) {
             System.out.println("Error al cargar el look an feel");
         }
+        
+        
+        new LoginWindow().setVisible(true);
         
         
     }
