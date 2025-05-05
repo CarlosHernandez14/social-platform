@@ -240,6 +240,11 @@ public class HomeWindow extends javax.swing.JFrame {
         itemPerfil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         itemPerfil.setForeground(new java.awt.Color(102, 102, 102));
         itemPerfil.setText("Editar Perfil");
+        itemPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemPerfilActionPerformed(evt);
+            }
+        });
         popupProfile.add(itemPerfil);
 
         itemCerrarSesion.setBackground(new java.awt.Color(255, 255, 255));
@@ -632,6 +637,11 @@ public class HomeWindow extends javax.swing.JFrame {
         this.dispose();
         new LoginWindow().setVisible(true);
     }//GEN-LAST:event_itemCerrarSesionActionPerformed
+
+    private void itemPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemPerfilActionPerformed
+        // TODO add your handling code here:
+        new EditProfileWindow(this.profileLog).setVisible(true);
+    }//GEN-LAST:event_itemPerfilActionPerformed
 
     /**
      * @param args the command line arguments
