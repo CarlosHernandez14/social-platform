@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 public class PanelFriendShip extends javax.swing.JPanel {
 
     private FriendShip friendShip;
+    private Profile profileLog;
     
     /**
      * Creates new form PanelFriendShip
@@ -24,18 +25,22 @@ public class PanelFriendShip extends javax.swing.JPanel {
         initComponents();
     }
     
-    public PanelFriendShip(FriendShip friendShip) {
+    public PanelFriendShip(FriendShip friendShip, Profile profilelog) {
         initComponents();
         
         this.friendShip = friendShip;
-        
+        this.profileLog = profilelog;
         initData();
     }
     
     private void initData() {
         
         // Init the data for the given friend
-        Profile friendProf = Dao.getProfileById(this.friendShip.getFriendId().toString());
+        String friendId = this.profileLog.getIdProfile().toString().equals(this.friendShip.getProfileId().toString())
+                ? this.friendShip.getFriendId().toString()
+                : this.friendShip.getProfileId().toString();
+        
+        Profile friendProf = Dao.getProfileById(friendId);
         
         this.labelName.setText(friendProf.getName() + " " + friendProf.getLastName());
         

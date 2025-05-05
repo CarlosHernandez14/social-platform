@@ -192,7 +192,7 @@ public class PanelFriendReq extends javax.swing.JPanel {
     private void buttonRejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRejectActionPerformed
         // TODO add your handling code here:
         
-        this.friendReq.setIsReqAccepted(false);
+        this.friendReq.setIsReqAccepted(true);
         
         // Update the request
         if (Dao.updateFriendRequest(this.friendReq.getIdFriendRequest().toString(), this.friendReq)) {

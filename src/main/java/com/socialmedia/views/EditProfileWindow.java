@@ -4,11 +4,23 @@
  */
 package com.socialmedia.views;
 
+import com.socialmedia.dao.Dao;
+import com.socialmedia.domain.Image;
 import com.socialmedia.domain.Profile;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Date;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import jnafilechooser.api.JnaFileChooser;
 
 public class EditProfileWindow extends javax.swing.JFrame {
 
     private Profile profile;
+    private byte[] fotoCargadaBytes;
+    private String imageName;
+    private boolean imageChanged = false;
     /**
      * Creates new form EditProfileWindow
      */
@@ -36,7 +48,29 @@ public class EditProfileWindow extends javax.swing.JFrame {
         this.fieldAddress.setText(this.profile.getAddress());
         this.fieldPhone.setText(this.profile.getPhoneNumber());
         
+        // Load image data
         
+        // Load the profile image if exists
+        // Get the profile image if exists
+        if (this.profile.getProfileImageId() != null) {
+            Image image = Dao.getImageById(this.profile.getProfileImageId().toString());
+            
+            File foto = new File("images/" + image.getImage_path());
+            this.imageName = image.getImage_path();
+            
+            try {
+                byte[] fotoBytes = Files.readAllBytes(foto.toPath());
+                this.fotoCargadaBytes = fotoBytes;
+
+                this.panelImagePreview.setIcon(new ImageIcon(fotoBytes));
+
+                this.panelImagePreview.revalidate();
+                this.panelImagePreview.repaint();
+
+            } catch (IOException ex) {
+                System.out.println("Error al obtener la imagen del arhivo");
+            }
+        }
         
     }
     
@@ -55,7 +89,7 @@ public class EditProfileWindow extends javax.swing.JFrame {
         containerInput1 = new RoundedPanel(20);
         fieldLastname = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        panelImage1 = new org.edisoncor.gui.panel.PanelImage();
+        panelImagePreview = new PanelImageRedondeado();
         containerInput = new RoundedPanel(20);
         fieldName = new javax.swing.JTextField();
         containerInput2 = new RoundedPanel(20);
@@ -67,9 +101,7 @@ public class EditProfileWindow extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        containerInput5 = new RoundedPanel(20);
-        fieldPassword = new javax.swing.JTextField();
+        btnEditImage = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -108,16 +140,16 @@ public class EditProfileWindow extends javax.swing.JFrame {
 
         jSeparator1.setForeground(new java.awt.Color(204, 204, 204));
 
-        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/DefaultPerson.jpg"))); // NOI18N
+        panelImagePreview.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/DefaultPerson.jpg"))); // NOI18N
 
-        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
-        panelImage1.setLayout(panelImage1Layout);
-        panelImage1Layout.setHorizontalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout panelImagePreviewLayout = new javax.swing.GroupLayout(panelImagePreview);
+        panelImagePreview.setLayout(panelImagePreviewLayout);
+        panelImagePreviewLayout.setHorizontalGroup(
+            panelImagePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 61, Short.MAX_VALUE)
         );
-        panelImage1Layout.setVerticalGroup(
-            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        panelImagePreviewLayout.setVerticalGroup(
+            panelImagePreviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 61, Short.MAX_VALUE)
         );
 
@@ -230,36 +262,14 @@ public class EditProfileWindow extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText("Contraseña");
-
-        containerInput5.setBackground(new java.awt.Color(244, 244, 244));
-
-        fieldPassword.setBackground(new java.awt.Color(244, 244, 244));
-        fieldPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        fieldPassword.setForeground(new java.awt.Color(102, 102, 102));
-        fieldPassword.setText("***************");
-        fieldPassword.setBorder(null);
-        fieldPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-
-        javax.swing.GroupLayout containerInput5Layout = new javax.swing.GroupLayout(containerInput5);
-        containerInput5.setLayout(containerInput5Layout);
-        containerInput5Layout.setHorizontalGroup(
-            containerInput5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containerInput5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(fieldPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        containerInput5Layout.setVerticalGroup(
-            containerInput5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(containerInput5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(fieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        btnEditImage.setBackground(new java.awt.Color(255, 255, 255));
+        btnEditImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icon-editimage.png"))); // NOI18N
+        btnEditImage.setBorderPainted(false);
+        btnEditImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditImageActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -267,11 +277,13 @@ public class EditProfileWindow extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEditImage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelImagePreview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelName, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(81, 81, 81))
@@ -280,39 +292,42 @@ public class EditProfileWindow extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(containerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(107, 107, 107)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(containerInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(containerInput2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(containerInput5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(containerInput4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addGap(304, 304, 304))
+                                .addComponent(containerInput4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(containerInput2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(containerInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(107, 107, 107)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(containerInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(labelName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(labelName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnEditImage)
+                            .addComponent(panelImagePreview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -331,13 +346,9 @@ public class EditProfileWindow extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(containerInput4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(containerInput5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(18, 18, 18)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -354,9 +365,82 @@ public class EditProfileWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnEditImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditImageActionPerformed
+        // TODO add your handling code here:
+
+        // Open the file  chooser
+
+        JnaFileChooser fileChooser = new JnaFileChooser();
+        if (fileChooser.showOpenDialog(this)) {
+            try {
+                String imagePath = fileChooser.getSelectedFile().toPath().toString();
+                File foto = new File(imagePath);
+
+                this.fotoCargadaBytes = Files.readAllBytes(foto.toPath());
+                // Cargamos la foto
+                this.panelImagePreview.setIcon(new ImageIcon(this.fotoCargadaBytes));
+
+                // Set the name of the image
+
+                this.imageName = foto.getName().split("\\.")[0] + "_" + System.currentTimeMillis() + "." + foto.getName().split("\\.")[1];
+
+                this.panelImagePreview.revalidate();
+                this.panelImagePreview.repaint();
+
+                this.imageChanged = true;
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error al cargar la foto seleccionada");
+                System.out.println("Error al cargar la foto: " + e.getMessage());
+            }
+        }
+
+    }//GEN-LAST:event_btnEditImageActionPerformed
+
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        
+
+        // Get the data from the inputs
+
+        String name = this.fieldName.getText();
+        String lastname = this.fieldLastname.getText();
+        String address = this.fieldAddress.getText();
+        String phoneNumb =  this.fieldPhone.getText();
+
+        this.profile.setName(name);
+        this.profile.setLastName(lastname);
+        this.profile.setAddress(address);
+        this.profile.setPhoneNumber(phoneNumb);
+
+        if (imageChanged) {
+            // Save image in the folder images in the project root
+            String imagePath = "images/" + this.imageName;
+            File imageFile = new File(imagePath);
+            try {
+                Files.write(imageFile.toPath(), this.fotoCargadaBytes);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error al guardar la imagen");
+                System.out.println("Error al guardar la imagen en los archivos: " + e.getMessage());
+                return;
+            }
+            // Create image
+            Image image = new Image(this.imageName, new Date());
+            // Save image
+            if (!Dao.saveImage(image)) {
+                JOptionPane.showMessageDialog(null, "Error al guardar la imagen");
+                System.out.println("Error al guardar la imagen en el archivo");
+                return;
+            }
+
+            this.profile.setProfileImageId(image.getIdImage());
+        }
+
+        if (Dao.updateProfile(this.profile.getIdProfile().toString(), this.profile)) {
+            JOptionPane.showMessageDialog(null, "Perfil actualizado exitosamente");
+
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Ha ocurrido un error al actualizar tu perfil");
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     /**
@@ -395,27 +479,23 @@ public class EditProfileWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditImage;
     private javax.swing.JButton btnSave;
     private javax.swing.JPanel containerInput;
     private javax.swing.JPanel containerInput1;
     private javax.swing.JPanel containerInput2;
-    private javax.swing.JPanel containerInput3;
     private javax.swing.JPanel containerInput4;
-    private javax.swing.JPanel containerInput5;
     private javax.swing.JTextField fieldAddress;
     private javax.swing.JTextField fieldLastname;
     private javax.swing.JTextField fieldName;
-    private javax.swing.JTextField fieldPassword;
     private javax.swing.JTextField fieldPhone;
-    private javax.swing.JTextField fieldTittle3;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel labelName;
-    private org.edisoncor.gui.panel.PanelImage panelImage1;
+    private org.edisoncor.gui.panel.PanelImage panelImagePreview;
     // End of variables declaration//GEN-END:variables
 }

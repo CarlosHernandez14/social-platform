@@ -8,12 +8,17 @@ import com.formdev.flatlaf.ui.FlatButtonBorder;
 import com.socialmedia.dao.Dao;
 import com.socialmedia.domain.FriendRequest;
 import com.socialmedia.domain.FriendShip;
+import com.socialmedia.domain.Image;
 import com.socialmedia.domain.Post;
 import com.socialmedia.domain.Profile;
 import com.socialmedia.domain.User;
 import com.socialmedia.utils.WrapLayout;
 import java.awt.FlowLayout;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class HomeWindow extends javax.swing.JFrame {
@@ -80,6 +85,9 @@ public class HomeWindow extends javax.swing.JFrame {
         }
         
         for (Post post : allPosts) {
+            if(this.profileLog.getIdProfile().toString().equals(post.getProfileId().toString()))
+                continue;
+            
             PanelPost singlePost = new PanelPost(post, this.profileLog, this);
             this.containerHome.add(singlePost);
         }
@@ -91,10 +99,13 @@ public class HomeWindow extends javax.swing.JFrame {
     
     public void initMyPostsData() {
         
+        
         this.containerMyPosts.removeAll();
         
         // Get the posts for the profile
         List<Post> userPosts = Dao.getPostsByProfileId(this.profileLog.getIdProfile().toString());
+        
+        initProfilePic();
         
         // If theres no posts
         if (userPosts == null || userPosts.isEmpty()) {
@@ -113,6 +124,29 @@ public class HomeWindow extends javax.swing.JFrame {
         this.containerMyPosts.revalidate();
         this.containerMyPosts.repaint();
         
+    }
+    
+    private void initProfilePic() {
+        // Load image data
+        // Load the profile image if exists
+        // Get the profile image if exists
+        if (this.profileLog.getProfileImageId() != null) {
+            Image image = Dao.getImageById(this.profileLog.getProfileImageId().toString());
+            
+            File foto = new File("images/" + image.getImage_path());
+            
+            try {
+                byte[] fotoBytes = Files.readAllBytes(foto.toPath());
+
+                this.panelImageProfilePic.setIcon(new ImageIcon(fotoBytes));
+
+                this.panelImageProfilePic.revalidate();
+                this.panelImageProfilePic.repaint();
+
+            } catch (IOException ex) {
+                System.out.println("Error al obtener la imagen del arhivo");
+            }
+        }
     }
     
     public void initPersonsData() {
@@ -150,6 +184,7 @@ public class HomeWindow extends javax.swing.JFrame {
         
         List<FriendShip> friends = Dao.getFriendsByUserId(this.profileLog.getIdProfile().toString());
         
+        
         // If theres no requests
         if (friends == null || friends.isEmpty()) {
             JLabel label = new JLabel("No tienes amigos aun :(");
@@ -160,7 +195,7 @@ public class HomeWindow extends javax.swing.JFrame {
         }
         
         for (FriendShip friend : friends) {
-            PanelFriendShip panelFriend = new PanelFriendShip(friend);
+            PanelFriendShip panelFriend = new PanelFriendShip(friend, this.profileLog);
             this.containerFriends.add(panelFriend);
         }
         
@@ -185,6 +220,9 @@ public class HomeWindow extends javax.swing.JFrame {
         }
         
         for (FriendRequest friendRequest : friendRequests) {
+            if (friendRequest.isIsReqAccepted() || friendRequest.isIsReqRejected()) 
+                continue;
+            
             PanelFriendReq panelFriendReq = new PanelFriendReq(friendRequest, this);
             this.containerFriendReq.add(panelFriendReq);
         }

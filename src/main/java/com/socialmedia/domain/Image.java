@@ -34,6 +34,13 @@ public class Image implements Serializable {
         this.idImage = UUID.randomUUID();
     }
     
+    public Image(String image_path, Date createdAt) {
+        this.image_path = image_path;
+        this.createdAt = createdAt;
+        
+        this.idImage = UUID.randomUUID();
+    }
+    
 
     public UUID getIdImage() {
         return idImage;

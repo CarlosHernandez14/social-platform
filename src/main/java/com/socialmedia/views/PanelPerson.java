@@ -52,6 +52,9 @@ public class PanelPerson extends RoundedPanel {
         if (Dao.isFriend(this.profileLogged.getIdProfile().toString(), this.profile.getIdProfile().toString())) {
             this.btnAddFriend.setVisible(false);
             this.labelAddress.setText("Ya son amigos!");
+        } else if (Dao.isFriendRequestRejected(this.profileLogged.getIdProfile().toString(), this.profile.getIdProfile().toString())) {
+            this.btnAddFriend.setVisible(false);
+            this.labelAddress.setText("Lo siento, esta persona  no quiere ser tu amigo :(");
         } else if (Dao.isFriendRequestSent(this.profileLogged.getIdProfile().toString(), this.profile.getIdProfile().toString())) {
             this.btnAddFriend.setVisible(false);
             this.labelAddress.setText("Solicitud de amistad enviada!");            

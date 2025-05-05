@@ -6,6 +6,8 @@ import com.socialmedia.domain.Image;
 import com.socialmedia.domain.Post;
 import com.socialmedia.domain.PostReaction;
 import com.socialmedia.domain.Profile;
+import com.socialmedia.domain.Reaction;
+import com.socialmedia.domain.ReactionType;
 import com.socialmedia.views.PanelImageRedondeado;
 import com.socialmedia.views.RoundedPanel;
 import java.awt.FlowLayout;
@@ -87,6 +89,33 @@ public class PanelPost extends RoundedPanel {
         
         // Init reactions
         initReactions();
+        
+        initProfilePostPic(profilePost);
+    }
+    
+    // Method t load panel image profile
+    private void initProfilePostPic(Profile profilePoster) {
+        // Load image data
+        
+        // Load the profile image if exists
+        // Get the profile image if exists
+        if (profilePoster.getProfileImageId() != null) {
+            Image image = Dao.getImageById(profilePoster.getProfileImageId().toString());
+            
+            File foto = new File("images/" + image.getImage_path());
+            
+            try {
+                byte[] fotoBytes = Files.readAllBytes(foto.toPath());
+
+                this.panelImageProfile.setIcon(new ImageIcon(fotoBytes));
+
+                this.panelImageProfile.revalidate();
+                this.panelImageProfile.repaint();
+
+            } catch (IOException ex) {
+                System.out.println("Error al obtener la imagen del arhivo");
+            }
+        }
     }
     
     private void initReactions() {
@@ -131,26 +160,56 @@ public class PanelPost extends RoundedPanel {
 
         itemLike.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icon-like.png"))); // NOI18N
         itemLike.setPreferredSize(new java.awt.Dimension(45, 38));
+        itemLike.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemLikeActionPerformed(evt);
+            }
+        });
         popupReaction.add(itemLike);
 
         itemLove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/love-emoji.png"))); // NOI18N
         itemLove.setPreferredSize(new java.awt.Dimension(45, 38));
+        itemLove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemLoveActionPerformed(evt);
+            }
+        });
         popupReaction.add(itemLove);
 
         itemSad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/sad-emoji.png"))); // NOI18N
         itemSad.setPreferredSize(new java.awt.Dimension(45, 38));
+        itemSad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemSadActionPerformed(evt);
+            }
+        });
         popupReaction.add(itemSad);
 
         itemAngry.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/angry-emoji.png"))); // NOI18N
         itemAngry.setPreferredSize(new java.awt.Dimension(45, 38));
+        itemAngry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemAngryActionPerformed(evt);
+            }
+        });
         popupReaction.add(itemAngry);
 
         itemSurprised.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/surprise-emoji.png"))); // NOI18N
         itemSurprised.setPreferredSize(new java.awt.Dimension(45, 38));
+        itemSurprised.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemSurprisedActionPerformed(evt);
+            }
+        });
         popupReaction.add(itemSurprised);
 
         itemFunny.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/funny-emoji.png"))); // NOI18N
         itemFunny.setPreferredSize(new java.awt.Dimension(45, 38));
+        itemFunny.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemFunnyActionPerformed(evt);
+            }
+        });
         popupReaction.add(itemFunny);
 
         itemDelete.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -333,6 +392,137 @@ public class PanelPost extends RoundedPanel {
         }
         
     }//GEN-LAST:event_itemDeleteActionPerformed
+
+    private void itemLikeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLikeActionPerformed
+        // TODO add your handling code here:
+        
+        Reaction like = Dao.getReactionByType(ReactionType.LIKE);
+        if (like == null) {
+            if(!Dao.saveReactionByType(ReactionType.LIKE)) {
+                JOptionPane.showMessageDialog(null, "Ocurrio un error al registrar la reaccion :(");
+                return;
+            }
+            like = Dao.getReactionByType(ReactionType.LIKE);
+        }
+        
+        PostReaction newPostReact = new PostReaction(this.post.getIdPost(), like.getIdReaction());
+        
+        if (Dao.savePostReaction(newPostReact)) {
+            this.initReactions();
+        } else
+            JOptionPane.showMessageDialog(null, "Lo siento, ha ocurrido un error al reaccionar. Intentalo mas tarde :(");
+
+        
+    }//GEN-LAST:event_itemLikeActionPerformed
+
+    private void itemLoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemLoveActionPerformed
+        // TODO add your handling code here:
+
+        Reaction love = Dao.getReactionByType(ReactionType.LOVE);
+        if (love == null) {
+            if(!Dao.saveReactionByType(ReactionType.LOVE)) {
+                JOptionPane.showMessageDialog(null, "Ocurrio un error al registrar la reaccion :(");
+                return;
+            }
+            love = Dao.getReactionByType(ReactionType.LOVE);
+        }
+
+        PostReaction newPostReact = new PostReaction(this.post.getIdPost(), love.getIdReaction());
+        if (Dao.savePostReaction(newPostReact)) {
+            this.initReactions();
+        } else
+            JOptionPane.showMessageDialog(null, "Lo siento, ha ocurrido un error al reaccionar. Intentalo mas tarde :(");
+        
+
+    }//GEN-LAST:event_itemLoveActionPerformed
+
+    private void itemSadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSadActionPerformed
+        // TODO add your handling code here:
+
+        Reaction sad = Dao.getReactionByType(ReactionType.SAD);
+        if (sad == null) {
+            if(!Dao.saveReactionByType(ReactionType.SAD)) {
+                JOptionPane.showMessageDialog(null, "Ocurrio un error al registrar la reaccion :(");
+                return;
+            }
+            sad = Dao.getReactionByType(ReactionType.SAD);
+        }
+
+        PostReaction newPostReact = new PostReaction(this.post.getIdPost(), sad.getIdReaction());
+        if (Dao.savePostReaction(newPostReact)) {
+            this.initReactions();
+        } else
+            JOptionPane.showMessageDialog(null, "Lo siento, ha ocurrido un error al reaccionar. Intentalo mas tarde :(");
+
+    }//GEN-LAST:event_itemSadActionPerformed
+
+    private void itemAngryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAngryActionPerformed
+        // TODO add your handling code here:
+
+        Reaction angry = Dao.getReactionByType(ReactionType.ANGRY);
+
+        if (angry == null) {
+            if(!Dao.saveReactionByType(ReactionType.ANGRY)) {
+                JOptionPane.showMessageDialog(null, "Ocurrio un error al registrar la reaccion :(");
+                return;
+            }
+            angry = Dao.getReactionByType(ReactionType.ANGRY);
+        }
+
+        PostReaction newPostReact = new PostReaction(this.post.getIdPost(), angry.getIdReaction());
+
+        if (Dao.savePostReaction(newPostReact)) {
+            this.initReactions();
+        } else
+            JOptionPane.showMessageDialog(null, "Lo siento, ha ocurrido un error al reaccionar. Intentalo mas tarde :(");
+
+
+    }//GEN-LAST:event_itemAngryActionPerformed
+
+    private void itemSurprisedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSurprisedActionPerformed
+        // TODO add your handling code here:
+
+        Reaction surprised = Dao.getReactionByType(ReactionType.SURPRISED);
+
+        if (surprised == null) {
+            if(!Dao.saveReactionByType(ReactionType.SURPRISED)) {
+                JOptionPane.showMessageDialog(null, "Ocurrio un error al registrar la reaccion :(");
+                return;
+            }
+            surprised = Dao.getReactionByType(ReactionType.SURPRISED);
+        }
+
+        PostReaction newPostReact = new PostReaction(this.post.getIdPost(), surprised.getIdReaction());
+
+        if (Dao.savePostReaction(newPostReact)) {
+            this.initReactions();
+        } else
+            JOptionPane.showMessageDialog(null, "Lo siento, ha ocurrido un error al reaccionar. Intentalo mas tarde :(");
+
+
+
+    }//GEN-LAST:event_itemSurprisedActionPerformed
+
+    private void itemFunnyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemFunnyActionPerformed
+        // TODO add your handling code here:
+
+        Reaction funny = Dao.getReactionByType(ReactionType.FUNNY);
+
+        if (funny == null) {
+            if(!Dao.saveReactionByType(ReactionType.FUNNY)) {
+                JOptionPane.showMessageDialog(null, "Ocurrio un error al registrar la reaccion :(");
+                return;
+            }
+            funny = Dao.getReactionByType(ReactionType.FUNNY);
+        }
+
+        PostReaction newPostReact = new PostReaction(this.post.getIdPost(), funny.getIdReaction());
+        if (Dao.savePostReaction(newPostReact)) {
+            this.initReactions();
+        } else
+            JOptionPane.showMessageDialog(null, "Lo siento, ha ocurrido un error al reaccionar. Intentalo mas tarde :(");
+            
+    }//GEN-LAST:event_itemFunnyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -21,6 +21,7 @@ import com.socialmedia.domain.Post;
 import com.socialmedia.domain.PostReaction;
 import com.socialmedia.domain.Profile;
 import com.socialmedia.domain.Reaction;
+import com.socialmedia.domain.ReactionType;
 import com.socialmedia.domain.User;
 import com.socialmedia.utils.AppConstants;
 import com.socialmedia.utils.PasswordUtils;
@@ -211,6 +212,29 @@ public class Dao {
         }
 
         return null;
+    }
+
+    // Method to update a profile
+    public static boolean updateProfile(String profileId, Profile profile) {
+        // Load the profiles from the file 
+
+        List<Profile> profiles = getAllProfiles();
+
+        // Check if the profile exists
+        for (Profile p : profiles) {
+            if (p.getIdProfile().toString().equals(profileId)) {
+                // Update the profile
+                p.setName(profile.getName());
+                p.setLastName(profile.getLastName());
+                p.setAddress(profile.getAddress());
+                p.setPhoneNumber(profile.getPhoneNumber());
+                p.setProfileImageId(profile.getProfileImageId());
+                break;
+            }
+        }
+
+        // Save the profiles to the file 
+        return saveProfiles(profiles);
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -417,7 +441,7 @@ public class Dao {
         // Check if the image exists
         List<Image> postImages = new ArrayList<>();
         for (Image i : images) {
-            if (i.getPostId().toString().equals(postId)) {
+            if (i.getPostId() != null && i.getPostId().toString().equals(postId)) {
                 postImages.add(i);
             }
         }
@@ -433,7 +457,7 @@ public class Dao {
 
         // Check if the image exists
         for (Image i : images) {
-            if (i.getPostId().toString().equals(postId)) {
+            if (i.getPostId() != null && i.getPostId().toString().equals(postId)) {
                 images.remove(i);
             }
         }
@@ -507,6 +531,44 @@ public class Dao {
         // Save the reactions to the file 
         return saveReactions(reactions);
     }
+
+    // Method to get a reaction by type (ReactionType (Enum))
+    public static Reaction getReactionByType(ReactionType type) {
+        // Load the reactions from the file 
+
+        List<Reaction> reactions = getAllReactions();
+
+        // Check if the reaction exists
+        for (Reaction r : reactions) {
+            if (r.getType().equals(type)) {
+                return r;
+            }
+        }
+
+        return null;
+    }
+
+    // Method to save a reaction by type (ReactionType (Enum))
+    public static boolean saveReactionByType(ReactionType type) {
+        // Load the reactions from the file 
+
+        List<Reaction> reactions = getAllReactions();
+
+        // Check if the reaction exists
+        for (Reaction r : reactions) {
+            if (r.getType().equals(type)) {
+                return false;
+            }
+        }
+        
+        // Add the reaction to the list
+        Reaction reaction = new Reaction(type);
+        reactions.add(reaction);
+
+        // Save the reactions to the file 
+        return saveReactions(reactions);
+    }
+
 
     //////////////////////////////////////////////////////////////////////////////
     // METHODS TO HANDLE THE REACTIONS FOR POSTS DATA
@@ -724,6 +786,22 @@ public class Dao {
 
         // Save the friends requests to the file 
         return saveFriendRequests(friendRequests);
+    }
+
+    // Method to get if a friend request is rejected by a userId (profileReqId) to another userId (receivedId)
+    public static boolean isFriendRequestRejected(String profileReqId, String receivedId) {
+        // Load the friends requests from the file 
+
+        List<FriendRequest> friendRequests = getAllFriendRequests();
+
+        // Check if the friend request exists
+        for (FriendRequest fr : friendRequests) {
+            if (fr.getProfileReqId().toString().equals(profileReqId) && fr.getProfielReceivedId().toString().equals(receivedId)) {
+                return fr.isIsReqRejected();
+            }
+        }
+
+        return false;
     }
 
     /////////////////////////////////////////////////////////////////////////////
