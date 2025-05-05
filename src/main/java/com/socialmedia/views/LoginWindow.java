@@ -6,6 +6,7 @@ package com.socialmedia.views;
 
 import com.socialmedia.dao.Dao;
 import com.socialmedia.domain.User;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -102,6 +103,14 @@ public class LoginWindow extends javax.swing.JFrame {
         fieldPass.setForeground(new java.awt.Color(102, 102, 102));
         fieldPass.setText("ej: 1dfk@.csD");
         fieldPass.setBorder(null);
+        fieldPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                fieldPassKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fieldPassKeyTyped(evt);
+            }
+        });
 
         jSeparator2.setBackground(new java.awt.Color(204, 204, 204));
         jSeparator2.setForeground(new java.awt.Color(204, 204, 204));
@@ -258,6 +267,21 @@ public class LoginWindow extends javax.swing.JFrame {
         new HomeWindow(user).setVisible(true);
         
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void fieldPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldPassKeyTyped
+
+        
+    }//GEN-LAST:event_fieldPassKeyTyped
+
+    private void fieldPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldPassKeyPressed
+        // TODO add your handling code here:
+        
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            System.out.println("ENTER PRESSSED");
+            this.btnLoginActionPerformed(null);
+        }
+        
+    }//GEN-LAST:event_fieldPassKeyPressed
 
     /**
      * @param args the command line arguments

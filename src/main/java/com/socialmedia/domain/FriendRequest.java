@@ -16,27 +16,30 @@ public class FriendRequest implements Serializable {
     private UUID profielReceivedId;
     private boolean isReqAccepted; 
     private boolean isReqRejected;
+    private String message;
     
     private Date createdAt;
 
     public FriendRequest() {
     }
 
-    public FriendRequest(UUID idFriendRequest, UUID profileReqId, UUID profielReceivedId, boolean isReqAccepted, boolean isReqRejected, Date createdAt) {
+    public FriendRequest(UUID idFriendRequest, UUID profileReqId, UUID profielReceivedId, boolean isReqAccepted, boolean isReqRejected, Date createdAt, String message) {
         this.idFriendRequest = idFriendRequest;
         this.profileReqId = profileReqId;
         this.profielReceivedId = profielReceivedId;
         this.isReqAccepted = isReqAccepted;
         this.isReqRejected = isReqRejected;
         this.createdAt = createdAt;
+        this.message = message;
     }
 
-    public FriendRequest(UUID profileReqId, UUID profielReceivedId, boolean isReqAccepted, boolean isReqRejected, Date createdAt) {
+    public FriendRequest(UUID profileReqId, UUID profielReceivedId, boolean isReqAccepted, boolean isReqRejected, Date createdAt, String message) {
         this.profileReqId = profileReqId;
         this.profielReceivedId = profielReceivedId;
         this.isReqAccepted = isReqAccepted;
         this.isReqRejected = isReqRejected;
         this.createdAt = createdAt;
+        this.message = message;
         
         this.idFriendRequest = UUID.randomUUID();
     }
@@ -88,12 +91,20 @@ public class FriendRequest implements Serializable {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+    
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     @Override
     public String toString() {
-        return "FriendRequest{" + "idFriendRequest=" + idFriendRequest + ", profileReqId=" + profileReqId + ", profielReceivedId=" + profielReceivedId + ", isReqAccepted=" + isReqAccepted + ", isReqRejected=" + isReqRejected + ", createdAt=" + createdAt + '}';
+        return "FriendRequest{" + "idFriendRequest=" + idFriendRequest + ", profileReqId=" + profileReqId + ", profielReceivedId=" + profielReceivedId + ", isReqAccepted=" + isReqAccepted + ", isReqRejected=" + isReqRejected + ", message=" + message + ", createdAt=" + createdAt + '}';
     }
-    
     
     
 }

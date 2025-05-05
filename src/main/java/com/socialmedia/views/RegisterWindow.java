@@ -276,10 +276,12 @@ public class RegisterWindow extends javax.swing.JFrame {
         String email = this.fieldEmail.getText();
         String pass = this.fieldPass.getText();
         
-        if (Dao.register(username, pass)) {
+        if (Dao.register(username, email, pass)) {
             JOptionPane.showMessageDialog(null, "Usuario registrado exitosamente");
             this.dispose();
             new LoginWindow().setVisible(true);
+            
+            return;
         }
         
         JOptionPane.showMessageDialog(null, "Ocurrio un error al realizar tu registro. Intentalo mas tarde");

@@ -19,10 +19,13 @@ public class SocialMediaPlatform {
     public static void main(String[] args) {
         System.out.println("Hello World!");
         
-//        Dao.getAllUsers().forEach(System.out::println);
-        
-//        Dao.register("charly@gmail.com", "charly");
 
+        
+//        Dao.register("charly", "charly@gmail.com", "charly");
+//        
+//        Dao.getAllUsers().forEach(System.out::println);
+//        Dao.getAllProfiles().forEach(System.out::println);
+        
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
             

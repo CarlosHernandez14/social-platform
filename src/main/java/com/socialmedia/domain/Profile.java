@@ -13,6 +13,7 @@ public class Profile implements Serializable {
     private String name;
     private String lastName; 
     private String phoneNumber; 
+    private String address;
     
     // Foreign keys
     private UUID userId; 
@@ -87,11 +88,18 @@ public class Profile implements Serializable {
     public void setProfileImageId(UUID profileImageId) {
         this.profileImageId = profileImageId;
     }
+    
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    
     @Override
     public String toString() {
         return "Profile{" + "idProfile=" + idProfile + ", name=" + name + ", lastName=" + lastName + ", phoneNumber=" + phoneNumber + ", userId=" + userId + ", profileImageId=" + profileImageId + '}';
     }
 
-    
 }
