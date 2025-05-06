@@ -85,8 +85,15 @@ public class HomeWindow extends javax.swing.JFrame {
         }
         
         for (Post post : allPosts) {
+            // Not  show owned posts
             if(this.profileLog.getIdProfile().toString().equals(post.getProfileId().toString()))
                 continue;
+            if (Dao.isBlockedFriend(this.profileLog.getIdProfile().toString(), post.getProfileId().toString()))
+                continue;
+            
+            if (Dao.isBlockedFriend(post.getProfileId().toString(), this.profileLog.getIdProfile().toString()))
+                continue;
+            
             
             PanelPost singlePost = new PanelPost(post, this.profileLog, this);
             this.containerHome.add(singlePost);
@@ -195,7 +202,7 @@ public class HomeWindow extends javax.swing.JFrame {
         }
         
         for (FriendShip friend : friends) {
-            PanelFriendShip panelFriend = new PanelFriendShip(friend, this.profileLog);
+            PanelFriendShip panelFriend = new PanelFriendShip(friend, this.profileLog, this);
             this.containerFriends.add(panelFriend);
         }
         

@@ -101,6 +101,11 @@ public class RegisterWindow extends javax.swing.JFrame {
         fieldEmail.setForeground(new java.awt.Color(102, 102, 102));
         fieldEmail.setText("ej: ejemplo@gmail.com");
         fieldEmail.setBorder(null);
+        fieldEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fieldEmailMouseClicked(evt);
+            }
+        });
 
         jSeparator1.setBackground(new java.awt.Color(204, 204, 204));
         jSeparator1.setForeground(new java.awt.Color(204, 204, 204));
@@ -114,6 +119,11 @@ public class RegisterWindow extends javax.swing.JFrame {
         fieldPass.setForeground(new java.awt.Color(102, 102, 102));
         fieldPass.setText("ej: 1dfk@.csD");
         fieldPass.setBorder(null);
+        fieldPass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fieldPassMouseClicked(evt);
+            }
+        });
 
         jSeparator2.setBackground(new java.awt.Color(204, 204, 204));
         jSeparator2.setForeground(new java.awt.Color(204, 204, 204));
@@ -162,6 +172,11 @@ public class RegisterWindow extends javax.swing.JFrame {
         fieldUsername.setForeground(new java.awt.Color(102, 102, 102));
         fieldUsername.setText("ej: Juan Perez");
         fieldUsername.setBorder(null);
+        fieldUsername.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fieldUsernameMouseClicked(evt);
+            }
+        });
 
         jSeparator5.setBackground(new java.awt.Color(204, 204, 204));
         jSeparator5.setForeground(new java.awt.Color(204, 204, 204));
@@ -287,6 +302,21 @@ public class RegisterWindow extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Ocurrio un error al realizar tu registro. Intentalo mas tarde");
         
     }//GEN-LAST:event_btnCreateAccActionPerformed
+
+    private void fieldUsernameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fieldUsernameMouseClicked
+        // TODO add your handling code here:
+        this.fieldUsername.setText("");
+    }//GEN-LAST:event_fieldUsernameMouseClicked
+
+    private void fieldEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fieldEmailMouseClicked
+        // TODO add your handling code here:
+        this.fieldEmail.setText("");
+    }//GEN-LAST:event_fieldEmailMouseClicked
+
+    private void fieldPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fieldPassMouseClicked
+        // TODO add your handling code here:
+        this.fieldPass.setText("");
+    }//GEN-LAST:event_fieldPassMouseClicked
 
     /**
      * @param args the command line arguments

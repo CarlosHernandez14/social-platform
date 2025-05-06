@@ -30,14 +30,14 @@
             <version>RELEASE230</version>
         </dependency>
         <dependency>
-            <groupId>jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>5.5.0</version>
-        </dependency>
-        <dependency>
             <groupId>swing-jnafilechooser</groupId>
             <artifactId>swing-jnafilechooser</artifactId>
             <version>1</version>
+        </dependency>
+        <dependency>
+            <groupId>jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.5.0</version>
         </dependency>
     </dependencies>
     <properties>

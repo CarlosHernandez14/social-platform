@@ -90,6 +90,11 @@ public class LoginWindow extends javax.swing.JFrame {
         fieldEmail.setForeground(new java.awt.Color(102, 102, 102));
         fieldEmail.setText("ej: ejemplo@gmail.com");
         fieldEmail.setBorder(null);
+        fieldEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fieldEmailMouseClicked(evt);
+            }
+        });
 
         jSeparator1.setBackground(new java.awt.Color(204, 204, 204));
         jSeparator1.setForeground(new java.awt.Color(204, 204, 204));
@@ -103,6 +108,11 @@ public class LoginWindow extends javax.swing.JFrame {
         fieldPass.setForeground(new java.awt.Color(102, 102, 102));
         fieldPass.setText("ej: 1dfk@.csD");
         fieldPass.setBorder(null);
+        fieldPass.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fieldPassMouseClicked(evt);
+            }
+        });
         fieldPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 fieldPassKeyPressed(evt);
@@ -282,6 +292,16 @@ public class LoginWindow extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_fieldPassKeyPressed
+
+    private void fieldEmailMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fieldEmailMouseClicked
+        // TODO add your handling code here:
+        this.fieldEmail.setText("");
+    }//GEN-LAST:event_fieldEmailMouseClicked
+
+    private void fieldPassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fieldPassMouseClicked
+        // TODO add your handling code here:
+        this.fieldPass.setText("");
+    }//GEN-LAST:event_fieldPassMouseClicked
 
     /**
      * @param args the command line arguments

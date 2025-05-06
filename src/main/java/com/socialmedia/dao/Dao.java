@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.socialmedia.domain.BlockedFriend;
 import com.socialmedia.domain.FriendRequest;
 import com.socialmedia.domain.FriendShip;
 import com.socialmedia.domain.Image;
@@ -901,6 +902,106 @@ public class Dao {
         }
 
         return false;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    /// METHODS TO HANDLE BLOCKED FRIENDS DATA
+    
+    // Method to get all the blocked friends
+    @SuppressWarnings("unchecked")
+    public static List<BlockedFriend> getAllBlockedFriends() {
+        // Load the blocked friends from the file 
+
+        File file = new File(AppConstants.BLOCKED_FRIENDS_FILE);
+
+        if (file.exists()) {
+
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                List<BlockedFriend> blockedFriends = (List<BlockedFriend>) ois.readObject();
+                ois.close();
+                // Check if the list is empty
+                if (blockedFriends == null || blockedFriends.isEmpty()) {
+                    blockedFriends = new ArrayList<>();
+                }
+
+                return blockedFriends;
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            System.out.println("Archivo no encontrado: " + AppConstants.BLOCKED_FRIENDS_FILE);
+        }
+
+
+        return new ArrayList<>();
+    }
+
+    public static boolean saveBlockedFriends(List<BlockedFriend> blockedFriends) {
+        // Save the blocked friends to the file 
+
+        File file = new File(AppConstants.BLOCKED_FRIENDS_FILE);
+
+        // Save the blocked friends to the file 
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(blockedFriends);
+            oos.flush();
+            oos.close();
+
+            return true;
+        } catch (IOException e) {
+            Logger.getLogger(Dao.class.getName()).log(java.util.logging.Level.SEVERE, "No se pudieron guardar los amigos bloqueados", e);
+            e.printStackTrace();
+        }
+        
+        return false;
+    }
+
+    // Method to save a blocked friend by (idWhoBlock) and (idBlockedProfile)
+    public static boolean saveBlockedFriend(BlockedFriend blockedFriend) {
+        // Load the blocked friends from the file 
+
+        List<BlockedFriend> blockedFriends = getAllBlockedFriends();
+
+        // Add the blocked friend to the list
+        blockedFriends.add(blockedFriend);
+
+        // Save the blocked friends to the file 
+        return saveBlockedFriends(blockedFriends);
+    }
+
+    // Method to check if a profile is blocked by another profile (idWhoBlock) and (idBlockedProfile)
+    public static boolean isBlockedFriend(String idWhoBlock, String idBlockedProfile) {
+        // Load the blocked friends from the file 
+
+        List<BlockedFriend> blockedFriends = getAllBlockedFriends();
+
+        // Check if the blocked friend exists
+        for (BlockedFriend bf : blockedFriends) {
+            if (bf.getIdWhoBlock().toString().equals(idWhoBlock) && bf.getIdBlockedProfile().toString().equals(idBlockedProfile)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Method to delete a blocked friend by (idWhoBlock) and (idBlockedProfile)
+    public static boolean deleteBlockedFriend(String idWhoBlock, String idBlockedProfile) {
+        // Load the blocked friends from the file 
+
+        List<BlockedFriend> blockedFriends = getAllBlockedFriends();
+
+        // Check if the blocked friend exists
+        for (BlockedFriend bf : blockedFriends) {
+            if (bf.getIdWhoBlock().toString().equals(idWhoBlock) && bf.getIdBlockedProfile().toString().equals(idBlockedProfile)) {
+                blockedFriends.remove(bf);
+                break;
+            }
+        }
+
+        // Save the blocked friends to the file 
+        return saveBlockedFriends(blockedFriends);
     }
 
     

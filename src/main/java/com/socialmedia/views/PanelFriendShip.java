@@ -5,18 +5,24 @@
 package com.socialmedia.views;
 
 import com.socialmedia.dao.Dao;
+import com.socialmedia.domain.BlockedFriend;
 import com.socialmedia.domain.FriendShip;
 import com.socialmedia.domain.Image;
 import com.socialmedia.domain.Profile;
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class PanelFriendShip extends javax.swing.JPanel {
 
     private FriendShip friendShip;
     private Profile profileLog;
+    private String fiendId;
+    
+    private HomeWindow homeWindow;
     
     /**
      * Creates new form PanelFriendShip
@@ -25,11 +31,12 @@ public class PanelFriendShip extends javax.swing.JPanel {
         initComponents();
     }
     
-    public PanelFriendShip(FriendShip friendShip, Profile profilelog) {
+    public PanelFriendShip(FriendShip friendShip, Profile profilelog, HomeWindow homeWindow) {
         initComponents();
         
         this.friendShip = friendShip;
         this.profileLog = profilelog;
+        this.homeWindow = homeWindow;
         initData();
     }
     
@@ -39,10 +46,26 @@ public class PanelFriendShip extends javax.swing.JPanel {
         String friendId = this.profileLog.getIdProfile().toString().equals(this.friendShip.getProfileId().toString())
                 ? this.friendShip.getFriendId().toString()
                 : this.friendShip.getProfileId().toString();
+        this.fiendId = friendId;
+        
+        if (Dao.isBlockedFriend(this.profileLog.getIdProfile().toString(), friendId)) {
+            this.setBackground(new Color(255, 153, 153));
+            this.labelName.setForeground(Color.WHITE);
+            
+            this.itemBloquear.setText("Desbloquear");
+        }
         
         Profile friendProf = Dao.getProfileById(friendId);
         
         this.labelName.setText(friendProf.getName() + " " + friendProf.getLastName());
+
+        
+        if (Dao.isBlockedFriend(friendId, this.profileLog.getIdProfile().toString())) {
+            this.setBackground(new Color(255, 153, 153));
+            this.labelName.setForeground(Color.WHITE);
+            this.buttonOptions.setEnabled(false);
+//            this.labelName.setText(this.labelName.getText() + "(Te bloqueo :c)");
+        }
         
         // Load the profile image if exists
         // Get the profile image if exists
@@ -87,6 +110,11 @@ public class PanelFriendShip extends javax.swing.JPanel {
         itemBloquear.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         itemBloquear.setForeground(new java.awt.Color(153, 0, 0));
         itemBloquear.setText("Bloquear");
+        itemBloquear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemBloquearActionPerformed(evt);
+            }
+        });
         popupOptions.add(itemBloquear);
 
         setBackground(new java.awt.Color(244, 244, 244));
@@ -151,6 +179,42 @@ public class PanelFriendShip extends javax.swing.JPanel {
         
         this.popupOptions.show(this.buttonOptions, 0, this.buttonOptions.getHeight());
     }//GEN-LAST:event_buttonOptionsActionPerformed
+
+    private void itemBloquearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemBloquearActionPerformed
+        // TODO add your handling code here:
+        
+        if (this.itemBloquear.getText().equalsIgnoreCase("Bloquear")) {
+            
+            // Blocked the friend
+            Profile profileFriend = Dao.getProfileById(this.fiendId);
+            BlockedFriend blockedFriend = new BlockedFriend(this.profileLog.getIdProfile(), profileFriend.getIdProfile());
+            
+            if (Dao.saveBlockedFriend(blockedFriend)) {
+                this.setBackground(new Color(255, 153, 153));
+                this.labelName.setForeground(Color.WHITE);
+
+                this.itemBloquear.setText("Desbloquear");
+                JOptionPane.showMessageDialog(null, "Has bloqueado a " + profileFriend.getName());
+                this.homeWindow.initHomeData();
+            } else
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error al bloquear al perfil");
+            
+        } else if (this.itemBloquear.getText().equalsIgnoreCase("Desbloquear")) {
+            // Unblock the friend
+            Profile unblockedFriend = Dao.getProfileById(this.fiendId);
+            if (Dao.deleteBlockedFriend(this.profileLog.getIdProfile().toString(), this.fiendId)) {
+                this.setBackground(new Color(244,244,244));
+                this.labelName.setForeground(new Color(60,63,65));
+                
+                this.itemBloquear.setText("Bloquear");
+                JOptionPane.showMessageDialog(null, "Has desbloqueado a " + unblockedFriend.getName());
+                this.homeWindow.initHomeData();
+            } else
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error al desbloquear al perfil");
+
+        }
+        
+    }//GEN-LAST:event_itemBloquearActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
