@@ -26,6 +26,7 @@ import com.socialmedia.domain.ReactionType;
 import com.socialmedia.domain.User;
 import com.socialmedia.utils.AppConstants;
 import com.socialmedia.utils.PasswordUtils;
+import java.util.Iterator;
 
 public class Dao {
     
@@ -329,13 +330,15 @@ public class Dao {
         List<Post> posts = getAllPosts();
 
         // Check if the post exists
-        for (Post p : posts) {
+        Iterator<Post> it = posts.iterator();
+        while (it.hasNext()) {
+            Post p = it.next();
             if (p.getIdPost().toString().equals(postId)) {
-                posts.remove(p);
+                it.remove();  // elimina de manera segura
                 break;
             }
         }
-
+        
         // Save the posts to the file 
         if (savePosts(posts)) {
             // Delete the images of the post
@@ -457,11 +460,15 @@ public class Dao {
         List<Image> images = getAllImages();
 
         // Check if the image exists
-        for (Image i : images) {
-            if (i.getPostId() != null && i.getPostId().toString().equals(postId)) {
-                images.remove(i);
+        Iterator<Image> it = images.iterator();
+        while (it.hasNext()) {
+            Image img = it.next();
+            if (img.getPostId() != null
+                && img.getPostId().toString().equals(postId)) {
+                it.remove();  // elimina usando el Iterator
             }
         }
+
 
         // Save the images to the file 
         return saveImages(images);
