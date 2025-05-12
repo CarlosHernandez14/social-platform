@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.socialmedia</groupId>
-    <artifactId>SocialMediaPlatform</artifactId>
+    <artifactId>RedSocialMark63</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <repositories>
@@ -29,20 +29,11 @@
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE230</version>
         </dependency>
-        <dependency>
-            <groupId>swing-jnafilechooser</groupId>
-            <artifactId>swing-jnafilechooser</artifactId>
-            <version>1</version>
-        </dependency>
-        <dependency>
-            <groupId>jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>5.5.0</version>
-        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.socialmedia.socialmediaplatform.SocialMediaPlatform</exec.mainClass>
+        <exec.mainClass>com.socialmedia.redsocialmark63.RedSocialMark63</exec.mainClass>
     </properties>
+    <name>RedSocialMark63</name>
 </project>
